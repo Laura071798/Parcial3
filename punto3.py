@@ -27,7 +27,7 @@ firebase_admin.initialize_app(cred, {
 })
 
 ventana = Tk()
-ventana.geometry('850x850')
+ventana.geometry('850x350')
 ventana.configure(bg = 'white')
 ventana.title("Bienvenidos a las UI")
 texto = Label(ventana, text="entry", bg='cadet blue1', font=("Arial Bold", 14), fg="white")
@@ -37,7 +37,7 @@ texto.place(x=20, y=100)
 
 status=''
 
-def entrada(input):
+def entrada():
     content = dato.get()
     content2= dato2.get()
     dato.delete(0, END)
@@ -46,45 +46,106 @@ def entrada(input):
         if int(content2)==1:
             led1.write(1)
             status= 'ON'
+            ref = db.reference('Potenciometro')
+            ref.update({
+            'Data/Numero de LED': content,
+            'Data/Status': status
+    })
         if int(content2)==0:
             led1.write(0)
             status= 'OFF'
+            ref = db.reference('Potenciometro')
+            ref.update({
+            'Potenciometro/Numero de LED': content,
+            'Potenciometro/Status': status
+    })
     if int(content)== 9:
         if int(content2)==1:
             led2.write(1)
             status= 'ON'
+            ref = db.reference('Potenciometro')
+            ref.update({
+            'Potenciometro/Numero de LED': content,
+            'Potenciometro/Status': status
+    })
         if int(content2)==0:
             led2.write(0)
             status= 'OFF'
+            ref = db.reference('Potenciometro')
+            ref.update({
+            'Potenciometro/Numero de LED': content,
+            'Potenciometro/Status': status
+    })
     if int(content)== 10:
         if int(content2)==1:
             led3.write(1)
             status= 'ON'
+            ref = db.reference('Potenciometro')
+            ref.update({
+            'Potenciometro/Numero de LED': content,
+            'Potenciometro/Status': status
+    })
         if int(content2)==0:
             led3.write(0)
             status= 'OFF'
+            ref = db.reference('Potenciometro')
+            ref.update({
+            'Potenciometro/Numero de LED': content,
+            'Potenciometro/Status': status
+    })
     if int(content)== 11:
         if int(content2)==1:
             led4.write(1)
             status= 'ON'
+            ref = db.reference('Potenciometro')
+            ref.update({
+            'Potenciometro/Numero de LED': content,
+            'Potenciometro/Status': status
+    })
         if int(content2)==0:
             led4.write(0)
             status= 'OFF'
+        ref = db.reference('Potenciometro')
+        ref.update({
+            'Potenciometro/Numero de LED': content,
+            'Potenciometro/Status': status
+    })
+            
     if int(content)== 12:
         if int(content2)==1:
             led5.write(1)
             status= 'ON'
+            ref = db.reference('Potenciometro')
+            ref.update({
+            'Potenciometro/Numero de LED': content,
+            'Potenciometro/Status': status
+    })
         if int(content2)==0:
             led5.write(0)
             status= 'OFF'
+            ref = db.reference('Potenciometro')
+            ref.update({
+            'Potenciometro/Numero de LED': content,
+            'Potenciometro/Status': status
+    })
     if int(content)== 13:
         if int(content2)==1:
             led6.write(1)
             status= 'ON'
+        ref = db.reference('Potenciometro')
+        ref.update({
+            'Potenciometro/Numero de LED': content,
+            'Potenciometro/Status': status
+    })
         if int(content2)==0:
             led6.write(0)
             status= 'OFF'
-    else: 
+        ref = db.reference('Potenciometro')
+        ref.update({
+            'Potenciometro/Numero de LED': content,
+            'Potenciometro/Status': status
+    })
+    if int(content)<8 and int(content)>13:
         popup = Tk()
         popup.wm_title("")
         label = Label(popup, text="digite otro numero", font="Arial")
@@ -92,11 +153,39 @@ def entrada(input):
         B1 = Button(popup, text="Okay", command = popup.destroy)
         B1.pack()
         popup.mainloop()
-    ref = db.reference('Potenciometro')
-    ref.update({
-            'Potenciometro/Numero de LED': content,
-            'Potenciometro/Status': status
-    })
+
+def salida():
+    ref = db.reference("Potenciometro/Potenciometro")
+    x=ref.get()
+    y=x.get('Numero de LED')
+    z=x.get('Status')
+    print(y)
+    print(z)
+    if int (y)==8 and z=='ON':
+        led1.write(1)
+    if int (y)==8 and z=='OFF':
+        led1.write(0)
+    if int (y)==9 and z=='ON':
+        led2.write(1)
+    if int (y)==9 and z=='OFF':
+        led2.write(0)
+    if int (y)==10 and z=='ON':
+        led3.write(1)
+    if int (y)==10 and z=='OFF':
+        led3.write(0)
+    if int (y)==11 and z=='ON':
+        led4.write(1)
+    if int (y)==11 and z=='OFF':
+        led4.write(0)
+    if int (y)==12 and z=='ON':
+        led5.write(1)
+    if int (y)==12 and z=='OFF':
+        led5.write(0)
+    if int (y)==13 and z=='ON':
+        led6.write(1)
+    if int (y)==13 and z=='OFF':
+        led1.write(0)
+    
     
 Label(ventana, text="Input: ").place(x=20, y=60)
 dato = Entry(ventana)
@@ -109,6 +198,9 @@ dato2.place(x=90, y=150)
 dato2.bind('<Return>', entrada) 
 
 prom_15=Button(ventana,text="Guardar",command=entrada)
-prom_15.place(x=120, y=90)
+prom_15.place(x=220, y=90)
+
+prom_15=Button(ventana,text="Actualizar",command=salida)
+prom_15.place(x=320, y=90)
 
 ventana.mainloop()
